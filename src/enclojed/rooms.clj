@@ -1,22 +1,22 @@
 (in-ns 'enclojed.core)
 
-(def room-map {:prison {:intro (str "You awaken feeling lost and confused in a poorly lit room.\n"  
+(def room-map {:prison {:intro (str "___You awaken feeling lost and confused in a poorly lit room.\n"  
                                     "The smell of sweat and body odor fills your nostrils.\n"
                                     "You notice a set of metal bars._._._\n"
                                     "Your memory partially returns. You are in a prison cell.\n"
                                     "You must have been here for a long time. The reason of your "
-                                    "imprisonment still escapes your memory._")
+                                    "imprisonment still escapes your memory._\n")
                         :pathway (str "A dim light flickers from above, giving off an eerie glow.\n"
                            		 	  "Your body is covered in bruises.\n"
                                  	  "Against the wall is a small cot with a rusty toilet next to it.")
                         :outro ""}})
 
-(def intro (str "Welcome to enclojed! Enclojed is the first ever text-based-game written in clojure.\n"
-                       "You can view the game's source code on github after playing, but beware of spoilers!\n"
-                       "In enclojed, you play as a prison inmate with a strange case of amnesia.\n"
-                       "Type commands in the console to interact with the game. These commands are called 'actions'.\n"
-                       "Your goal is to escape the prison and figure out who you are.\n"
-                       "There are multiple endings to this game. See if you can find them all!\n"
+(def intro (str "Welcome to enclojed! Enclojed is the first ever text-based-game written in clojure. \n"
+                       "You can view the game's source code on github after playing, but beware of spoilers! \n"
+                       "In enclojed, you play as a prison inmate with a strange case of amnesia. \n"
+                       "Type commands in the console to interact with the game. These commands are called 'actions'. \n"
+                       "Your goal is to escape the prison and figure out who you are. \n"
+                       "There are multiple endings to this game. See if you can find them all! \n"
                        "If you need help, you can type 'help' at any time."))
 
 (def help (str "Type 'look' in the console to examine your surroundings. You can then type 'look [object]' to look at something specific.\n"

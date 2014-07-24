@@ -1,0 +1,1 @@
+gnome-terminal --geometry 100x25 --title='enclojure v0.1' -e 'java -jar target/uberjar/enclojed-0.1.0-SNAPSHOT-standalone.jar' --hide-menubar

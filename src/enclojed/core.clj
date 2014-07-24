@@ -5,6 +5,9 @@
 
 (declare cmd-quit cmd-unknown cmd-look cmd-help room-map help intro prison-look room-cmd)
 
+(def columns 80)
+(def lines 25)
+
 (defn get-room
   ([data] (get room-map (:room data)))
   ([room data] (get room-map room)))
@@ -74,6 +77,7 @@
   [& args]
   (println intro)
   (input "Press enter to start...")
+  (clear lines)
   (game-repl {:room :prison, :phase :intro, :inventory {}, :flags {}}))
 
 (load "commands")

@@ -1,5 +1,25 @@
 (ns enclojed.util
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string]
+            [clojure.java.io :as io])
+  (:import [java.io FileInputStream]
+           [java.io BufferedInputStream]
+           [javazoom.jl.player Player]))
+
+(defn play-file [filename & opts]
+  (let [fis (new FileInputStream (io/file (io/resource filename)))
+        bis (new BufferedInputStream fis)
+        player (new Player bis)]
+    (if-let [synchronously (first opts)]
+      (doto player
+        (.play)
+        (.close))
+      (.start (Thread. #(doto player (.play) (.close)))))))
+
+(defn clear
+  [columns]
+  (doseq [i (range columns)]
+    (println))
+  (println))
 
 (defn slow-print
   ([text]
@@ -8,7 +28,8 @@
    (doall (map (fn [%]
                  (if (= % \_)
                    (Thread/sleep (* speed 8))
-                   (do 
+                   (do
+                     (play-file "click.mp3")
                      (print %)
                      (flush)
                      (Thread/sleep speed))))
