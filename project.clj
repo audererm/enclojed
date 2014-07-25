@@ -4,7 +4,10 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [javazoom/jlayer "1.0.1"]]
+                 ;[overtone "0.6.0"]
+                 [clojure-lanterna "0.9.4"]
+                 [dragonconsole "3.0.0"]]
+  :repositories [["local" {:url ~(str (.toURI (java.io.File. "maven_repository")))}]]
   :main ^:skip-aot enclojed.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

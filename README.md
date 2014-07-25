@@ -1,17 +1,18 @@
 # enclojed
 
-FIXME: description
+A text-based adventure game written in clojure.
 
 ## Installation
 
-Download from http://example.com/FIXME.
+    $ git clone https://github.com/audererm/enclojed.git
 
 ## Usage
 
 FIXME: explanation
 
-    $ java -jar enclojed-0.1.0-standalone.jar [args]
-
+    $ cd enclojed
+    $ ./enclojed-0.1-linux.sh
+    
 ## Options
 
 FIXME: listing of options this app accepts.

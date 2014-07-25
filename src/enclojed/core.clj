@@ -1,7 +1,9 @@
 (ns enclojed.core
   (:gen-class)
   (:require [enclojed.util :refer :all]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [lanterna.terminal :as t])
+  (:import [com.eleet.dragonconsole DragonConsoleFrame]))
 
 (declare cmd-quit cmd-unknown cmd-look cmd-help room-map help intro prison-look room-cmd)
 
@@ -47,9 +49,46 @@
 
 (defn input
   [prefix]
-  (print prefix)
-  (flush)
-  (read-line))
+  (let [width (first (t/get-size term))
+        height (second (t/get-size term))
+        whitespace (loop [i width
+                          space ""]
+                     (if (>= i 0)
+                       (recur (dec i)
+                              (str space " "))
+                       space))]
+    (t/put-character term prefix 0 height)
+    (loop [keypress (t/get-key term)
+           command ""
+           clear false
+           update false]
+      (when clear
+        (t/put-string term whitespace 1 height))
+      (when update
+        (t/put-string term command 1 height))
+      (Thread/sleep 1)
+      (case keypress
+        :enter command
+        :backspace (recur (t/get-key term)
+                          (if (> (.length command) 0)
+                            (subs command 0 (dec (.length command)))
+                            commadnd) 
+                          true
+                          true)
+        [:escape :end] (cmd-quit)
+        [:delete :left :right :up :down :insert :home :tab 
+         :reverse-tab :page-up :page-down] (recur (t/get-key term)
+                                                  command
+                                                  false
+                                                  false)
+        nil (recur (t/get-key term)
+                   command
+                   false
+                   false)
+        (recur (t/get-key term)
+               (str command keypress)
+               false
+               true)))))
 
 (defn ask-do
   [data]
@@ -57,7 +96,7 @@
   (Thread/sleep 150)
   (println)
   (Thread/sleep 50)
-  (let [args (string/split (input ">") #" ")
+  (let [args (string/split (input \>) #" ")
         command (string/lower-case (first args))]
     (Thread/sleep 50)
     (parse-cmd command args data)))
@@ -75,10 +114,16 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (println intro)
-  (input "Press enter to start...")
-  (clear lines)
-  (game-repl {:room :prison, :phase :intro, :inventory {}, :flags {}}))
+  ;(t/start term)
+  (def frame (new DragonConsoleFrame))
+  (.setVisible frame true)
+  (t/in-terminal term
+                 (printstr intro)
+                 (loop [keypress (t/get-key-blocking term)] ; Waits for enter key
+                   (when-not (= keypress :enter)
+                     (recur (t/get-key-blocking term))))
+                 (t/clear term)
+                 (game-repl {:room :prison, :phase :intro, :inventory {}, :flags {}})))
 
 (load "commands")
 (load "rooms")

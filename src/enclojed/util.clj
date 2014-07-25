@@ -1,25 +1,27 @@
 (ns enclojed.util
   (:require [clojure.string :as string]
-            [clojure.java.io :as io])
-  (:import [java.io FileInputStream]
-           [java.io BufferedInputStream]
-           [javazoom.jl.player Player]))
+            [clojure.java.io :as io]
+            [lanterna.terminal :as t]))
 
-(defn play-file [filename & opts]
-  (let [fis (new FileInputStream (io/file (io/resource filename)))
-        bis (new BufferedInputStream fis)
-        player (new Player bis)]
-    (if-let [synchronously (first opts)]
-      (doto player
-        (.play)
-        (.close))
-      (.start (Thread. #(doto player (.play) (.close)))))))
+(def term (t/get-terminal :swing {:palette :gnome, :font ["Nimbus Mono L" 
+                                                          "Courier" 
+                                                          "Courier New" 
+                                                          "Courier 10"]}))
 
-(defn clear
-  [columns]
-  (doseq [i (range columns)]
-    (println))
-  (println))
+(defn printchar
+  [c]
+  (t/put-character term c))
+
+(defn printstr
+  [s]
+  (dorun (map #(printchar %) s)))
+
+(defn printline
+  ([s] 
+   (printstr s)
+   (printline))
+  ([]
+   ()))
 
 (defn slow-print
   ([text]
@@ -29,9 +31,7 @@
                  (if (= % \_)
                    (Thread/sleep (* speed 8))
                    (do
-                     (play-file "click.mp3")
-                     (print %)
-                     (flush)
+                     (printchar %)
                      (Thread/sleep speed))))
                text))))
 
